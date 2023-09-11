@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.itheima.mp.domain.po.User;
-import com.itheima.mp.domain.po.UserInfo;
 import com.itheima.mp.enums.UserStatus;
 import com.itheima.mp.service.IUserService;
 import org.junit.jupiter.api.Test;
@@ -28,8 +27,8 @@ class UserServiceImplTest {
         user.setPassword("123");
         user.setPhone("18688990011");
         user.setBalance(2000000);
-        // user.setInfo("{\"age\": 18, \"intro\": \"Java老师\", \"gender\": \"female\"}");
-        user.setInfo(UserInfo.of(18, "Java老师", "female"));
+        user.setInfo("{\"age\": 18, \"intro\": \"Java老师\", \"gender\": \"female\"}");
+//        user.setInfo(UserInfo.of(18, "Java老师", "female"));
         user.setCreateTime(LocalDateTime.now());
         user.setUpdateTime(LocalDateTime.now());
         user.setStatus(UserStatus.NORMAL);

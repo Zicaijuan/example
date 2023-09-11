@@ -39,7 +39,7 @@ public class User {
      * 详细信息
      */
     @TableField(typeHandler = JacksonTypeHandler.class)
-    private UserInfo info;
+    private String info;
 
     /**
      * 使用状态（1正常 2冻结）
