@@ -7,14 +7,22 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import javax.annotation.Resource;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @SpringBootTest
 class UserMapperTest {
 
-    @Autowired
+    @Resource
     private UserMapper userMapper;
+
+    @Test
+    void testQueryByIds(){
+        List<User> users = userMapper.queryUserByIds(List.of(1L,2L,3L));
+        users.forEach(System.out::println);
+    }
+
 
     @Test
     void testInsert() {
