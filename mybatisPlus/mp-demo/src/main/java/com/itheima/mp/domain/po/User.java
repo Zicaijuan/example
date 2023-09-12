@@ -38,7 +38,7 @@ public class User {
     /**
      * 详细信息
      */
-    @TableField(typeHandler = JacksonTypeHandler.class)
+//    @TableField(typeHandler = JacksonTypeHandler.class)
     private String info;
 
     /**
