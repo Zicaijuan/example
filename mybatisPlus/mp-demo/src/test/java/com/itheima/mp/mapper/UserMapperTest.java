@@ -100,4 +100,16 @@ class UserMapperTest {
         userMapper.update(null,wrapper);
     }
 
+    @Test
+    void testLambdaQueryWrapper(){
+        QueryWrapper<User> wrapper = new QueryWrapper<User>();
+        wrapper.lambda()
+                .select(User::getId,User::getUsername,User::getInfo,User::getBalance)
+                .like(User::getUsername,"o")
+                .ge(User::getBalance,"1000");
+
+        List<User> users = userMapper.selectList(wrapper);
+        users.forEach(System.out::println);
+    }
+
 }
