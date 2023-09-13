@@ -10,4 +10,10 @@ import java.util.List;
 
 public interface UserMapper extends BaseMapper<User> {
     List<User> queryUserByIds(@Param("ids") List<Long> ids);
+
+    @Update("update user set balance = balance - #{amount} ${ew.customSqlSegment}")
+    void deductBalanceByIds(@Param("amount") int amount,@Param("ew") QueryWrapper<User> wrapper);
+
+
+    List<User> queryUsersByWrapper( @Param("ew") QueryWrapper<User> wrapper);
 }

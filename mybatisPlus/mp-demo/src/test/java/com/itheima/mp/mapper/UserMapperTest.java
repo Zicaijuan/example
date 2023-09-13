@@ -1,11 +1,9 @@
 package com.itheima.mp.mapper;
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.itheima.mp.domain.po.User;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.annotation.Resource;
@@ -19,8 +17,8 @@ class UserMapperTest {
     private UserMapper userMapper;
 
     @Test
-    void testQueryByIds(){
-        List<User> users = userMapper.queryUserByIds(List.of(1L,2L,3L));
+    void testQueryByIds() {
+        List<User> users = userMapper.queryUserByIds(List.of(1L, 2L, 3L));
         users.forEach(System.out::println);
     }
 
@@ -40,12 +38,13 @@ class UserMapperTest {
     }
 
     @Test
-    void testSelectById(){
+    void testSelectById() {
         User user = userMapper.selectById(5L);
         System.out.println(user);
     }
+
     @Test
-    void selectByIds(){
+    void selectByIds() {
         List<User> users = userMapper.selectBatchIds(List.of(1L, 2L, 3L, 4L, 5L));
         users.forEach(System.out::println);
     }
@@ -65,51 +64,79 @@ class UserMapperTest {
      * 利用QueryWrapper查询
      */
     @Test
-    void testQueryWrapper(){
+    void testQueryWrapper() {
         //构建查询条件
         QueryWrapper<User> wrapper = new QueryWrapper<User>()
-                .select("id","username","info","balance")
-                .like("username","o")
-                .ge("balance",1000);
+                .select("id", "username", "info", "balance")
+                .like("username", "o")
+                .ge("balance", 1000);
 
         List<User> users = userMapper.selectList(wrapper);
         users.forEach(System.out::println);
     }
+
     @Test
-    void testUpdateQueryWrapper(){
+    void testUpdateQueryWrapper() {
         User user = new User();
         user.setBalance(2000);
 
         QueryWrapper<User> wrapper = new QueryWrapper<User>()
-                .eq("username","jack");
+                .eq("username", "jack");
 
         //user中的非空字段会被作为set条件
         //UPDATE user SET balance=? WHERE (username = ?)
 
-        userMapper.update(user,wrapper);
+        userMapper.update(user, wrapper);
     }
 
     /**
      * UpdateWrapper手写sql语句
      */
     @Test
-    void testUpdateWrapper(){
+    void testUpdateWrapper() {
         UpdateWrapper<User> wrapper = new UpdateWrapper<User>()
                 .setSql("balance = balance - 200")
-                        .in("id",List.of(1L,2L,3L));
-        userMapper.update(null,wrapper);
+                .in("id", List.of(1L, 2L, 3L));
+        userMapper.update(null, wrapper);
     }
 
     @Test
-    void testLambdaQueryWrapper(){
-        QueryWrapper<User> wrapper = new QueryWrapper<User>();
+    void testLambdaQueryWrapper() {
+        QueryWrapper<User> wrapper = new QueryWrapper<>();
         wrapper.lambda()
-                .select(User::getId,User::getUsername,User::getInfo,User::getBalance)
-                .like(User::getUsername,"o")
-                .ge(User::getBalance,"1000");
+                .select(User::getId, User::getUsername, User::getInfo, User::getBalance)
+                .like(User::getUsername, "o")
+                .ge(User::getBalance, "1000");
 
         List<User> users = userMapper.selectList(wrapper);
         users.forEach(System.out::println);
+    }
+
+    @Test
+    void testCustomWrapper() {
+        List<Long> ids = List.of(1L, 2L, 4L);
+        int amount = 200;
+
+        QueryWrapper<User> wrapper = new QueryWrapper<User>()
+                .in("id", ids);
+
+        userMapper.deductBalanceByIds(amount, wrapper);
+    }
+
+    /**
+     * 多表查询
+     */
+    @Test
+    void testCustomJoinWrapper() {
+        List<Long> ids = List.of(1L, 2L, 4L);
+        String city = "北京";
+
+        QueryWrapper<User> wrapper = new QueryWrapper<User>()
+                .in("u.id", ids)
+                .eq("a.city", city);
+
+        List<User> list = userMapper.queryUsersByWrapper(wrapper);
+        list.forEach(System.out::println);
     }
 
 }

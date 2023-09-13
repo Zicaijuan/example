@@ -43,7 +43,8 @@ class UserServiceImplTest {
 
     @Test
     void testSelect() {
-        List<User> list = userService.list(new QueryWrapper<User>().like("username", "o"));
+        List<User> list = userService.list(new QueryWrapper<User>()
+                .like("username", "o"));
         list.forEach(System.out::println);
     }
 
