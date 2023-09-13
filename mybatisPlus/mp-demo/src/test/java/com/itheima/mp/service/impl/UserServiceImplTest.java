@@ -88,20 +88,22 @@ class UserServiceImplTest {
     @Test
     void testLambdaQuery() {
 
-        User user = userService.lambdaQuery()
+        // 1.查询1个
+        User rose = userService.lambdaQuery()
                 .eq(User::getUsername, "Rose")
-                .one();
+                .one(); // .one()查询1个
+        System.out.println("rose = " + rose);
 
-        System.out.println("user = " + user);
-
-        List<User> list = userService.lambdaQuery()
+        // 2.查询多个
+        List<User> users = userService.lambdaQuery()
                 .like(User::getUsername, "o")
-                .list();
-        list.forEach(System.out::println);
+                .list(); // .list()查询集合
+        users.forEach(System.out::println);
 
+        // 3.count统计
         Long count = userService.lambdaQuery()
                 .like(User::getUsername, "o")
-                .count();
+                .count(); // .count()则计数
         System.out.println("count = " + count);
     }
 
@@ -111,6 +113,17 @@ class UserServiceImplTest {
         list.forEach(System.out::println);
     }
 
+    /**
+     * - 如果username参数不为空，则采用模糊查询;
+     * - 如果status参数不为空，则采用精确匹配；
+     * - 如果minBalance参数不为空，则余额必须大于minBalance
+     * - 如果maxBalance参数不为空，则余额必须小于maxBalance
+     * @param username
+     * @param status
+     * @param min
+     * @param max
+     * @return
+     */
     public List<User> queryUsers(String username, Integer status, Long min, Long max) {
         return userService.lambdaQuery()
                 .like(username != null, User::getUsername, username)
